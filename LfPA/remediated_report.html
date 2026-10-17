@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linux File Permission Analyzer - Report</title>
+  <style>
+    :root { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --muted: #94a3b8; --border: #334155; --crit: #ef4444; --high: #f97316; --med: #eab308; --low: #3b82f6; --success: #10b981; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); padding: 2rem; }
+    .container { max-width: 1200px; margin: 0 auto; }
+    header { margin-bottom: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; }
+    h1 { font-size: 1.8rem; font-weight: 700; color: #38bdf8; }
+    .subtitle { color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; text-align: center; }
+    .kpi-val { font-size: 2rem; font-weight: 700; margin-top: 0.5rem; }
+    .val-crit { color: var(--crit); }
+    .val-high { color: var(--high); }
+    .val-med { color: var(--med); }
+    .val-fixed { color: var(--success); }
+    table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: 8px; overflow: hidden; margin-top: 1rem; font-size: 0.88rem; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--border); }
+    th { background: #111827; color: var(--muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+    .badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .badge-CRITICAL { background: rgba(239, 68, 68, 0.2); color: var(--crit); border: 1px solid var(--crit); }
+    .badge-HIGH { background: rgba(249, 115, 22, 0.2); color: var(--high); border: 1px solid var(--high); }
+    .badge-MEDIUM { background: rgba(234, 179, 8, 0.2); color: var(--med); border: 1px solid var(--med); }
+    .badge-LOW { background: rgba(59, 130, 246, 0.2); color: var(--low); border: 1px solid var(--low); }
+    code { font-family: 'Courier New', Courier, monospace; background: #0f172a; padding: 2px 6px; border-radius: 4px; color: #a5f3fc; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1>Linux File Permission Analyzer</h1>
+      <div class="subtitle">Course 25CS2104E - Operating Systems & Systems Programming | Report Export</div>
+    </div>
+    <div style="text-align: right; color: var(--muted); font-size: 0.85rem;">
+      Target: <code>./demo_sandbox</code><br>Scanned: 8 files in 65.65 ms
+    </div>
+  </header>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div>Total Findings</div><div class="kpi-val">18</div></div>
+    <div class="kpi-card"><div>Critical Risk</div><div class="kpi-val val-crit">8</div></div>
+    <div class="kpi-card"><div>High Risk</div><div class="kpi-val val-high">10</div></div>
+    <div class="kpi-card"><div>Medium Risk</div><div class="kpi-val val-med">0</div></div>
+    <div class="kpi-card"><div>Remediated</div><div class="kpi-val val-fixed">18</div></div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>Severity</th>
+        <th>Rule</th>
+        <th>Mode</th>
+        <th>Owner</th>
+        <th>Path</th>
+        <th>Description</th>
+        <th>Remediation Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 683)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/backups</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 684)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-CRITICAL">CRITICAL</span></td>
+        <td><code>SEC-001</code></td>
+        <td><code>-rwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/backups/dump_2026.sql</code></td>
+        <td>World-writable executable/root file allows arbitrary code injection by any local user.</td>
+        <td>SUCCESS: Fixed to 0755 by child (PID 685)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/bin</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 686)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-CRITICAL">CRITICAL</span></td>
+        <td><code>SEC-001</code></td>
+        <td><code>-rwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/bin/fake_sgid_binary</code></td>
+        <td>World-writable executable/root file allows arbitrary code injection by any local user.</td>
+        <td>SUCCESS: Fixed to 0755 by child (PID 687)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-CRITICAL">CRITICAL</span></td>
+        <td><code>SEC-001</code></td>
+        <td><code>-rwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/bin/fake_suid_binary</code></td>
+        <td>World-writable executable/root file allows arbitrary code injection by any local user.</td>
+        <td>SUCCESS: Fixed to 0755 by child (PID 688)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/credentials</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 689)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-CRITICAL">CRITICAL</span></td>
+        <td><code>SEC-005</code></td>
+        <td><code>-rwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/credentials/.env</code></td>
+        <td>Sensitive secret or private key is accessible to group/world (current: 00777, required: 0600).</td>
+        <td>SUCCESS: Fixed to 0600 by child (PID 690)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-CRITICAL">CRITICAL</span></td>
+        <td><code>SEC-005</code></td>
+        <td><code>-rwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/credentials/id_rsa</code></td>
+        <td>Sensitive secret or private key is accessible to group/world (current: 00777, required: 0600).</td>
+        <td>SUCCESS: Fixed to 0600 by child (PID 691)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/links</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 692)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/safe</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 693)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-CRITICAL">CRITICAL</span></td>
+        <td><code>SEC-001</code></td>
+        <td><code>-rwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/safe/readme.txt</code></td>
+        <td>World-writable executable/root file allows arbitrary code injection by any local user.</td>
+        <td>SUCCESS: Fixed to 0755 by child (PID 694)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-CRITICAL">CRITICAL</span></td>
+        <td><code>SEC-001</code></td>
+        <td><code>-rwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/safe/safe_script.sh</code></td>
+        <td>World-writable executable/root file allows arbitrary code injection by any local user.</td>
+        <td>SUCCESS: Fixed to 0755 by child (PID 695)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/scripts</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 696)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-CRITICAL">CRITICAL</span></td>
+        <td><code>SEC-001</code></td>
+        <td><code>-rwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/scripts/world_writable_script.sh</code></td>
+        <td>World-writable executable/root file allows arbitrary code injection by any local user.</td>
+        <td>SUCCESS: Fixed to 0755 by child (PID 697)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/shared</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 698)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/shared/insecure_tmp</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 699)</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-HIGH">HIGH</span></td>
+        <td><code>SEC-004</code></td>
+        <td><code>drwxrwxrwx (00777)</code></td>
+        <td>stvr:stvr</td>
+        <td><code>./demo_sandbox/shared/secure_tmp</code></td>
+        <td>World-writable directory lacks Sticky Bit (01000). Any user can delete or rename other users' files.</td>
+        <td>SUCCESS: Fixed to 1777 by child (PID 700)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
